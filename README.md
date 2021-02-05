@@ -8,23 +8,19 @@
 
 ```shell
 npm install transx
+or
+yarn add transx
 ```
 
 ## 使用
 
-```javascript
-import TransX from "transx";
-...
-
-  components: {
-    TransX
-  },
-```
-
 ```html
 <!-- 包裹动画元素 -->
 <trans-x
-  :time="0.7"
+  :time="time"
+  :delay="delay"
+  :autoplay="autoplay"
+  :loop="loop"
   :nextTransition="nextTransition"
   :prevTransition="prevTransition"
   ref="transx"
@@ -33,76 +29,109 @@ import TransX from "transx";
 >
   <div class="comp" v-for="(item, index) in items" :key="index" :index="index + 1"></div>
 </trans-x>
+
 ```
 
-### 调用方法-切换到下一页
-
 ```javascript
-methods: {
-  transition: function(type) {
-    const { transx } = this.$refs;
-    if (type == "next")
-      transx.next();
-    else
-      transx.prev();
-  },
+import TransX from "transx";
 
-  goto: function(){
-    const { transx } = this.$refs;
-    transx.goto(3);
+export default {
+  components: {
+    TransX
   },
-
-  over: function() {
-    alert("到头了");
-  },
-
-  transitionEnd: function(currentIndex) {
-    this.currentIndex = currentIndex;
+  data() {
+    return {
+      time: 0.6,
+      loop: true,
+      autoplay: 1000,
+      delay: -1,
+      nextTransition: "fadeIn",
+      prevTransition: "fadeIn",
+      defaultIndex: 0
+    }
   }
 }
 ```
 
-### 组件属性
+## 支持参数
+|  参数   | 说明  | 类型  | 默认值  | 备注 |
+|  ----  | ----  |----  | ----  |  ----  |
+| time  | 动画时长 | number | 0.6 | 单位秒  |
+| loop  | 是否循环展现 | boolean | true |   |
+| autoplay  | 是否自动循环 | boolean, number | false | autoplay传递为true时，会赋予默认值1000，单位毫秒  |
+| delay  | 动画间隔 | number | -1 |   |
+| defaultIndex  | 默认显示第几张 | number | 0 |   |
+| nextTransition  | 下一个的动画，动画种类见下方 | string | moveLeftBack |   |
+| prevTransition  | 上一个的动画，动画种类见下方 | string | moveRightBack |   |
 
-- `defaultIndex` - 默认显示第几张
-- `time` - 动画时长
-- `delay` - 动画间隔
-- `nextTransition` - 下一个动画方式
-- `prevTransition` - 上一个动画方式
 
-### 组件事件
-
-- `over` - 跳转到了边界
-- `transitionend` - 动画结束
-
-## 动画种类
-
+## 支持事件
+- `over` - 跳转到了边界后的回调，当在第一页继续上翻和在最后一页继续下翻时调用
 ```javascript
-{ text: "fadeIn", value: "fadeIn" },
-{ text: "fadeOut", value: "fadeOut" },
-{ text: "flip", value: "flip" },
-{ text: "moveLeftQuart", value: "moveLeftQuart" },
-{ text: "moveRightQuart", value: "moveRightQuart" },
-{ text: "moveLeftBack", value: "moveLeftBack" },
-{ text: "moveRightBack", value: "moveRightBack" },
-{ text: "zoomOutBack", value: "zoomOutBack" },
-{ text: "zoomInBack", value: "zoomInBack" },
-{ text: "rotateLeftBack", value: "rotateLeftBack" },
-{ text: "rotateRightBack", value: "rotateRightBack" },
-{ text: "rotateLeftTop", value: "rotateLeftTop" },
-{ text: "rotateRightTop", value: "rotateRightTop" },
-{ text: "zoomRotateIn", value: "zoomRotateIn" },
-{ text: "zoomRotateOut", value: "zoomRotateOut" },
-{ text: "shuttleLeft", value: "shuttleLeft" },
-{ text: "shuttleRight", value: "shuttleRight" },
-{ text: "shuttleDown", value: "shuttleDown" },
-{ text: "shuttleUp", value: "shuttleUp" },
-{ text: "rollLeft", value: "rollLeft" },
-{ text: "rollRight", value: "rollRight" },
-{ text: "scaleXLeft", value: "scaleXLeft" },
-{ text: "scaleXRight", value: "scaleXRight" }
+  over: function(isEnd) {
+    console.log('边界到了', isEnd);
+  }
+```
+** 说明：当边界为翻到第一页时isEnd为false，当边界为翻到最后一页时isEnd为true，
+- `transitionend` - 动画结束时的回调，在动画结束后调用，参数为当前的索引，值从0开始
+```javascript
+  transitionEnd: function(currentIndex) {
+    console.log("当前到第几页了: ", currentIndex);
+  }
+```
+## 支持API
+- `goto` - 跳转到第几页，参数为页码标识，索引从0开始
+```javascript
+    this.$refs.transx.goto(3); // 跳转到第四页
+```
+- `prev` - 跳转到上一页
+```javascript
+    // 不传参
+    this.$refs.transx.prev();
+    // 传参
+    this.$refs.transx.prev({
+        time: 0.6,
+        delay: -1,
+        transition: "moveLeftQuart", // 参考下面[支持动画种类]
+    });
+```
+- `next` - 跳转到下一页
+```javascript
+    // 不传参
+    this.$refs.transx.next();
+    // 传参
+    this.$refs.transx.next({
+        time: 0.6,
+        delay: -1,
+        transition: "moveLeftQuart", // 参考下面[支持动画种类]
+    });
 ```
 
+## 支持的动画种类
+- `fadeIn`: 淡入
+- `fadeOut`: 淡出
+- `flip`: 翻转
+- `moveLeftQuart`: 
+- `moveRightQuart`: 
+- `moveLeftBack`: 
+- `moveRightBack`: 
+- `zoomOutBack`: 
+- `zoomInBack`: 
+- `rotateLeftBack`: 
+- `rotateRightBack`: 
+- `rotateLeftTop`: 
+- `rotateRightTop`: 
+- `zoomRotateIn`: 
+- `zoomRotateOut`: 
+- `shuttleLeft`: 
+- `shuttleRight`: 
+- `shuttleDown`: 
+- `shuttleUp`: 
+- `rollLeft`: 
+- `rollRight`: 
+- `scaleXLeft`: 
+- `scaleXRight`: 
+** 说明：种类较多，试试再选择，说不定有意外惊喜哦~
 ## License
 
 [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)

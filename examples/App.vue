@@ -2,12 +2,14 @@
   <div id="app">
     <div class="group">
       <trans-x
-        :time="0.7"
-        :nextTransition="nextTransition"
-        :prevTransition="prevTransition"
-        ref="transx"
-        @over="over"
-        @transitionend="transitionEnd"
+          :time="0.7"
+          :loop="true"
+          :autoplay="false"
+          :nextTransition="nextTransition"
+          :prevTransition="prevTransition"
+          ref="transx"
+          @over="over"
+          @transitionend="transitionEnd"
       >
         <comp class="comp" v-for="(item, index) in items" :key="index" :index="index + 1"> </comp>
       </trans-x>
@@ -48,7 +50,7 @@
 
 <script>
 import Comp from "./Comp.vue";
-import TransX from "../packages";
+import TransX from "../packages/components/TransX";
 
 export default {
   name: "App",
@@ -98,8 +100,8 @@ export default {
       this.$refs.transx.goto(0);
       this.currentIndex = 0;
     },
-    over: function() {
-      alert("结束");
+    over: function(isEnd) {
+      console.log("结束", isEnd);
     },
     transitionEnd: function(currentIndex) {
       this.currentIndex = currentIndex;

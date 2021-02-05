@@ -13,6 +13,10 @@ export default {
   props: {
     loop: {
       type: Boolean,
+      default: true
+    },
+    autoplay: {
+      type: [Boolean, Number],
       default: false
     },
     defaultIndex: {
@@ -47,6 +51,11 @@ export default {
     this.currentIndex = this.defaultIndex;
     this.addSubList();
     this.showCurrentComp();
+    if(this.autoplay) {
+      setTimeout(() => {
+        this.next();
+      }, typeof this.autoplay ==="boolean" ? 1000 : this.autoplay)
+    }
   },
   methods: {
     addSubList: function() {
@@ -88,37 +97,37 @@ export default {
     prev: function(conf = {}) {
       if (this.state != "end") return;
 
-      let { time, delay, prevTransition } = conf;
+      let { time, delay, transition } = conf;
       time = time || this.time;
       delay = delay || this.delay;
-      prevTransition = prevTransition || this.prevTransition;
+      transition = transition || this.prevTransition;
 
       if (this.currentIndex <= 0) {
-        this.$emit("over");
-        return;
+        this.$emit("over", false);
+        if (!this.loop ) return;
       }
 
       const current = this.list[this.currentIndex];
-      const next = this.list[this.currentIndex - 1];
-      this.transition({ current, next, delay, time, transType: prevTransition, direction: "prev" });
+      const next = this.list[(this.currentIndex + this.list.length - 1) % this.list.length];
+      this.transition({ current, next, delay, time, transType: transition, direction: "prev" });
     },
 
     next: function(conf = {}) {
       if (this.state != "end") return;
 
-      let { time, delay, nextTransition } = conf;
+      let { time, delay, transition } = conf;
       time = time || this.time;
       delay = delay || this.delay;
-      nextTransition = nextTransition || this.nextTransition;
+      transition = transition || this.nextTransition;
 
       if (this.currentIndex >= this.list.length - 1) {
-        this.$emit("over");
-        return;
+        this.$emit("over",true);
+        if (!this.loop ) return;
       }
 
       const current = this.list[this.currentIndex];
-      const next = this.list[this.currentIndex + 1];
-      this.transition({ current, next, delay, time, transType: nextTransition, direction: "next" });
+      const next = this.list[(this.currentIndex + 1) % this.list.length];
+      this.transition({ current, next, delay, time, transType: transition, direction: "next" });
     },
 
     goto: function(index) {
@@ -160,29 +169,19 @@ export default {
 
     transitionEnd: function(direction) {
       this.state = "end";
-      if (direction == "next") this.currentIndex++;
-      else this.currentIndex--;
+      if (direction == "next")
+        this.currentIndex++;
+      else
+        this.currentIndex = this.currentIndex + this.list.length - 1;
+      this.currentIndex = this.currentIndex % this.list.length
       this.showCurrentComp();
       this.$emit("transitionend", this.currentIndex);
+      if(this.autoplay && (this.loop || this.currentIndex < this.list.length)) {
+        setTimeout(() => {
+          this.next();
+        }, typeof this.autoplay ==="boolean" ? 1000 : this.autoplay)
+      }
     }
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
