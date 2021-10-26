@@ -1,10 +1,10 @@
-![](./icons/transx.png)
+![](./public/logo.png)
 
-# TransX
-
-一个小巧玲珑的 vue 组件切换动画库, 支持 10 几种动画切换方式
+一个小巧玲珑的 vue 组件切换动画库, 支持 10 几种动画切换方式, 效果十分炫酷并且非常轻量哦~
 
 <img src="http://mat1.gtimg.com/www/js/news/fadeIn.gif" alt="fadeIn" width="200" height="330"><img src="http://mat1.gtimg.com/www/js/news/zoomRotateIn.gif" alt="zoomRotateIn" width="200" height="330"><img src="http://mat1.gtimg.com/www/js/news/flip.gif" alt="flip" width="200" height="330"><img src="http://mat1.gtimg.com/www/js/news/shuttleRight.gif" alt="shuttleRight" width="200" height="330">
+
+`codesandbox`在线调试 [https://codesandbox.io/s/practical-sid-0ubim](https://codesandbox.io/s/practical-sid-0ubim)
 
 ## 安装
 
