@@ -1,6 +1,6 @@
 {
   "name": "transx",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "main": "dist/transx.umd.min.js",
   "scripts": {
     "start": "npm run serve",
