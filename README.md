@@ -1,8 +1,6 @@
 <p align="center">
-  <img width="650px" src="./public/logo.png" />
+  <img src="./public/logo.png" />
 </p>
-
----
 
 一个小巧玲珑的 vue 组件切换动画库, 支持 10 几种动画切换方式, 效果十分炫酷并且非常轻量哦~
 
