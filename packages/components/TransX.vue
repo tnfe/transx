@@ -132,11 +132,17 @@ export default {
 
     goto: function(index) {
       this.currentIndex = index;
+
+      this.killAll();
+      const currentDom = this.list[this.currentIndex];
       this.showCurrentComp();
-      // this.killAll();
-      const current = this.list[this.currentIndex];
-      gsap.set(current, { x: 0, y: 0, rotation: 0, alpha: 1, scale: 1 });
+      gsap.set(currentDom, { x: 0, y: 0, rotation: 0, alpha: 1, scale: 1 });
       this.$emit("gotoend", this.currentIndex);
+      this.state = "end";
+    },
+
+    kill: function(elem) {
+      gsap.killTweensOf(elem);
     },
 
     killAll: function() {
@@ -176,6 +182,7 @@ export default {
       this.currentIndex = this.currentIndex % this.list.length
       this.showCurrentComp();
       this.$emit("transitionend", this.currentIndex);
+
       if(this.autoplay && (this.loop || this.currentIndex < this.list.length)) {
         setTimeout(() => {
           this.next();
