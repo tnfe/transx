@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "Comp",
+  name: "comp",
   props: {
     index: Number
   },

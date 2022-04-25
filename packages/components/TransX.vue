@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="" ref="container">
     <slot></slot>
   </div>
 </template>
@@ -59,13 +59,11 @@ export default {
   },
   methods: {
     addSubList: function() {
-      this.$slots.default.forEach(vnode => {
-        if (vnode.tag) {
-          const elem = vnode.elm;
-          const displayStyle = elem.style.display || "block";
-          elem.setAttribute("data", displayStyle);
-          this.list.push(elem);
-        }
+      const { children } = this.$refs.container || {};
+      Array.from(children).forEach(elem => {
+        const displayStyle = elem.style.display || "block";
+        elem.setAttribute("data", displayStyle);
+        this.list.push(elem);
       });
     },
 

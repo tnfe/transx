@@ -11,7 +11,9 @@
           @over="over"
           @transitionend="transitionEnd"
       >
-        <comp class="comp" v-for="(item, index) in items" :key="index" :index="index + 1"> </comp>
+        <template v-for="(item, index) in items" :key="index">
+          <comp  class="comp" :index="index + 1"> </comp>
+        </template>
       </trans-x>
     </div>
 
