@@ -6,7 +6,6 @@
 
 <script>
 import gsap from "gsap";
-// import { h } from 'vue';
 import getAnimate from "../utils/animate";
 
 export default {
@@ -112,7 +111,6 @@ export default {
     },
 
     next: function(conf = {}) {
-      console.log('next', conf);
       if (this.state != "end") return;
 
       let { time, delay, transition } = conf;
@@ -152,7 +150,6 @@ export default {
     },
 
     transition: function({ current, next, delay, time, transType, direction }) {
-      console.log('current', current);
       this.state = "running";
       this.showComp(current);
       this.showComp(next);
