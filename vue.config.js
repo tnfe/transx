@@ -1,4 +1,5 @@
 module.exports = {
+  // lintOnSave: false,
   // 修改 src 为 examples
   pages: {
     index: {

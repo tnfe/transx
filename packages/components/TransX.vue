@@ -1,11 +1,12 @@
 <template>
-  <div class="">
+  <div class="" ref="container">
     <slot></slot>
   </div>
 </template>
 
 <script>
 import gsap from "gsap";
+// import { h } from 'vue';
 import getAnimate from "../utils/animate";
 
 export default {
@@ -59,13 +60,11 @@ export default {
   },
   methods: {
     addSubList: function() {
-      this.$slots.default.forEach(vnode => {
-        if (vnode.tag) {
-          const elem = vnode.elm;
-          const displayStyle = elem.style.display || "block";
-          elem.setAttribute("data", displayStyle);
-          this.list.push(elem);
-        }
+      const { children } = this.$refs.container || {};
+      Array.from(children).forEach(elem => {
+        const displayStyle = elem.style.display || "block";
+        elem.setAttribute("data", displayStyle);
+        this.list.push(elem);
       });
     },
 
@@ -113,6 +112,7 @@ export default {
     },
 
     next: function(conf = {}) {
+      console.log('next', conf);
       if (this.state != "end") return;
 
       let { time, delay, transition } = conf;
@@ -152,6 +152,7 @@ export default {
     },
 
     transition: function({ current, next, delay, time, transType, direction }) {
+      console.log('current', current);
       this.state = "running";
       this.showComp(current);
       this.showComp(next);
